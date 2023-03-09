@@ -1,11 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
-import { Button, Form, Spinner } from "react-bootstrap";
+import { Form, Spinner } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Alert } from "../components/Alert";
 import { PageHeader } from "../components/PageHeader";
 import { verify_Patient } from "../http-common";
 import { PATIENT_ID, PATIENT_ID_SCHEMA, VALIDATE } from "../Types";
+import { authenticate } from "../xmlrpc-common";
 import Cita from "./Cita";
 import Paciente from "./Paciente";
 

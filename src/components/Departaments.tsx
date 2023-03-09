@@ -1,9 +1,9 @@
 import data from '../data/Departaments.json'
 import { UseFormRegister } from 'react-hook-form'
-import { personalInformation } from '../pages/Paciente'
+import { PERSONAL_INFORMATION } from '../Types'
 
 type props = {
-  register: UseFormRegister<personalInformation>
+  register: UseFormRegister<PERSONAL_INFORMATION>
 }
 
 export default function Departaments({register}: props) {

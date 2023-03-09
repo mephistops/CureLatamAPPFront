@@ -2,9 +2,10 @@ import axios from "axios";
 import { APPOINTMENT, CITIES, ENABLED_APPOINTMENTS, ENABLED_HOURS, HEADQUARTERS, PERSONAL_INFORMATION } from "./Types";
 
 const http = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/v2.0/",
+  baseURL: "http://localhost:8000/api/v2.0/",
   headers: {
-    "Content-Type": 'application/json',
+    "Accept": "application/json",
+    "Content-Type": "application/json"
   }
 })
 

@@ -1,11 +1,11 @@
 import data from '../data/Cities.json'
 import { UseFormRegister } from 'react-hook-form'
-import { personalInformation } from '../pages/Paciente'
 import { useEffect, useState } from 'react'
+import { PERSONAL_INFORMATION } from '../Types'
 
 type props = {
   departament: string,
-  register: UseFormRegister<personalInformation>
+  register: UseFormRegister<PERSONAL_INFORMATION>
 }
 
 export default function Cities({ departament, register }: props) {
