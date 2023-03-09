@@ -6,7 +6,6 @@ import { Alert } from "../components/Alert";
 import { PageHeader } from "../components/PageHeader";
 import { verify_Patient } from "../http-common";
 import { PATIENT_ID, PATIENT_ID_SCHEMA, VALIDATE } from "../Types";
-import { authenticate } from "../xmlrpc-common";
 import Cita from "./Cita";
 import Paciente from "./Paciente";
 
@@ -87,7 +86,7 @@ export default function Pad() {
 
         {
           validatePatient !== undefined &&
-          (validatePatient ? <Cita identificacion={ID} /> : <Paciente identificacion={ID} tipo_identificacion={TID} />)
+          (validatePatient ? <Cita identificacion={ID} setValidatePatient={setValidatePatient} /> : <Paciente identificacion={ID} tipo_identificacion={TID} setValidatePatient={setValidatePatient}/>)
         }
       </div>
     </>

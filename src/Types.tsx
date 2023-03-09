@@ -19,10 +19,9 @@ export const APPOINTMENT_SCHEMA = yup.object({
 export type APPOINTMENT = yup.InferType<typeof APPOINTMENT_SCHEMA>;
 
 export type CITIES = {
-  id: number,
-  name: string,
-  code: string,
-  state_id: []
+  Identificacion: string,
+  Ciudad: string,
+  Departamento: string,
 }
 
 export type VALIDATE = true | false | undefined
@@ -56,8 +55,8 @@ export const PERSONAL_INFORMATION_SCHEMA = yup.object({
 export type PERSONAL_INFORMATION = yup.InferType<typeof PERSONAL_INFORMATION_SCHEMA>;
 
 export type HEADQUARTERS = {
-  id: number,
-  name: string
+  Sede: string,
+  Sede_id: string
 }
 
 export type ENABLED_APPOINTMENTS = {
@@ -67,6 +66,28 @@ export type ENABLED_APPOINTMENTS = {
   Sede_direccion: string,
   Jornada: string,
   Sede: string
+}
+
+export type APPOINTMENTS = {
+  Hora_cita: string,
+  Nombre_procedimiento: string,
+  Sede: string,
+  Nombre_paciente: string,
+  Fecha_cita: string,
+  Cita_id: number,
+  Nombre_doctor: string
+}
+
+export type APPOINTMENTS_t = {
+  Doctor: string,
+  Sede_telefono: string,
+  Fecha_hora: string,
+  Sede_direccion_normal: string,
+  Sede_direccion: string,
+  Codigo: string,
+  Sede: string,
+  Paciente: string,
+  Mensaje_confirmacion: string,
 }
 
 export type ENABLED_HOURS = {
@@ -92,5 +113,5 @@ type ICON = 'warning' | 'error' | 'success' | 'info' | 'question'
 export type ALERT = {
   title: string,
   icon: ICON,
-  text: string
+  text: string,
 }

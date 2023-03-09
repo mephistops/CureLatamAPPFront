@@ -1,12 +1,12 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useEffect, useState } from 'react'
+import { SetStateAction, useEffect, useState } from 'react'
 import { get_appointments, get_enabled_cities, get_headquarters, get_hours, obtener_fechas, put_appointment } from "../http-common";
-import { APPOINTMENT, APPOINTMENT_SCHEMA, CITIES, ENABLED_APPOINTMENTS, ENABLED_HOURS, HEADQUARTERS, VALIDATE } from "../Types";
+import { APPOINTMENT, APPOINTMENTS, APPOINTMENT_SCHEMA, CITIES, ENABLED_APPOINTMENTS, ENABLED_HOURS, HEADQUARTERS, VALIDATE } from "../Types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import dayjs from "dayjs";
 import { Alert } from "../components/Alert";
 
-export default function Cita({ identificacion }: { identificacion: string }) {
+export default function Cita({ identificacion, setValidatePatient }: { identificacion: string, setValidatePatient: React.Dispatch<SetStateAction<VALIDATE>> }) {
   const { register, setValue, handleSubmit, watch, formState: { errors }, unregister } = useForm<APPOINTMENT>({
     resolver: yupResolver(APPOINTMENT_SCHEMA),
     defaultValues: {
@@ -25,9 +25,7 @@ export default function Cita({ identificacion }: { identificacion: string }) {
   const minDate = watch('fecha')
   const especialidad = watch('especialidad')
   const procedimiento = watch('procedimiento')
-  const sede = watch('sede')
-  console.log(watch());
-  
+  const sede = watch('sede')  
 
   const get_cities = async () => {
     const data = await get_enabled_cities()
@@ -35,6 +33,7 @@ export default function Cita({ identificacion }: { identificacion: string }) {
   }
 
   const get_headquarter = async (city: string) => {
+    city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase()
     const data = await get_headquarters(city)
     setHeadquarters(data)
   }
@@ -45,7 +44,9 @@ export default function Cita({ identificacion }: { identificacion: string }) {
       setPrevAppointment(false)
     } else {
       setPrevAppointment(true)
-      Alert({title: "Información", icon: "warning", text: "Este usuario ya tiene una cita asignada"})
+        var nData = Object(data)
+        var body = `el día ${nData['Fecha_cita']} a las ${nData['Hora_cita']}, para el procedimiento: ${nData['Nombre_procedimiento']}, en la sede: ${nData['Sede']}`
+        Alert({title: "Información", icon: "warning", text: "Este usuario ya tiene una cita asignada "+body})
     }
   }
 
@@ -70,10 +71,13 @@ export default function Cita({ identificacion }: { identificacion: string }) {
 
   const set_appointment = async (data: APPOINTMENT) => {
     const res = await put_appointment(data)
-    if (!res) {
-      Alert({ title: "Información", icon: "info", text: "La cita no se ha podido registrar, intentelo de nuevo" })
+    
+    if (!res.Status) {
+      Alert({title:"Información", icon:"error", text:"La cita no se ha podido registrar, intentelo de nuevo"})
     } else {
-      Alert({ title: "Información", icon: "info", text: "La cita se agendó con éxito" })
+      var nData = (res.Data)      
+      var body = `para el día ${nData['Fecha_hora'].split(' ')[0]} a las ${nData['Fecha_hora'].split(' ')[1]}, en la sede: ${nData['Sede']}`
+      Alert({title: "Información", icon: "warning", text: "La cita se agendó con éxito "+body})
     }
   }
 
@@ -89,7 +93,6 @@ export default function Cita({ identificacion }: { identificacion: string }) {
   }, [sede])
 
   const onSubmit: SubmitHandler<APPOINTMENT> = data => {
-    alert("hola")
     set_appointment(data)
   }
 
@@ -107,17 +110,10 @@ export default function Cita({ identificacion }: { identificacion: string }) {
                     <select className="form-control" onChange={(e) => { setHeadquarters([]); get_headquarter(e.target.value) }}>
                       <option value="">Seleccione una ciudad</option>
                       {cities && cities.map((e, i) => (
-                        <option key={i} value={e.id}>{e.name}</option>
+                        <option key={i} value={e.Ciudad}>{e.Ciudad}</option>
                       ))}
                     </select>
                   </div>
-                    {errors.fecha && <span className="text-danger fw-bold">{errors.fecha?.message}</span>}
-                    {errors.id_fecha && <span className="text-danger fw-bold">{errors.id_fecha?.message}</span>}
-                    {errors.hora && <span className="text-danger fw-bold">{errors.hora?.message}</span>}
-                    {errors.id_hora && <span className="text-danger fw-bold">{errors.id_hora?.message}</span>}
-                    {errors.especialidad && <span className="text-danger fw-bold">{errors.especialidad?.message}</span>}
-                    {errors.procedimiento && <span className="text-danger fw-bold">{errors.procedimiento?.message}</span>}
-                    {errors.identificacion_paciente && <span className="text-danger fw-bold">{errors.identificacion_paciente?.message}</span>}
 
                   <div className="col-lg-4 col-md-6 col-sm-12 mg-t-10 mg-lg-t-0">
                     <label className="form-control-label">Sede: </label>
@@ -125,14 +121,14 @@ export default function Cita({ identificacion }: { identificacion: string }) {
                     <select className="form-control" {...register("sede", { required: true })}>
                       <option value="">Seleccione una sede</option>
                       {headquarters && headquarters.map((e, i) => (
-                        <option key={i} value={e.name}>{e.name}</option>
+                        <option key={i} value={e.Sede}>{e.Sede}</option>
                       ))}
                     </select>
                   </div>
 
                   <div className="col-lg-4 col-md-6 col-sm-12 mg-t-10 mg-lg-t-0">
                     <label className="form-control-label">Fecha: </label>
-                    <input type="date" {...register("fecha", { required: true })} min={minDate}></input>
+                    <input type="date" className="form-control" {...register("fecha", { required: true })} min={minDate}></input>
                   </div>
                 </div>
               </div>

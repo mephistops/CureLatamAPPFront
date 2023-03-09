@@ -1,4 +1,3 @@
-import { Form, Spinner } from "react-bootstrap"
 import Cities from "../components/Cities"
 import Departaments from "../components/Departaments"
 import { create_Patient } from "../http-common"
@@ -7,9 +6,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import dayjs from "dayjs";
 
 import { useForm, SubmitHandler } from "react-hook-form"
-import { PERSONAL_INFORMATION, PERSONAL_INFORMATION_SCHEMA } from "../Types"
+import { PERSONAL_INFORMATION, PERSONAL_INFORMATION_SCHEMA, VALIDATE } from "../Types"
+import { SetStateAction } from "react"
 
-export default function Paciente({ identificacion, tipo_identificacion }: { identificacion: string, tipo_identificacion: string }) {
+export default function Paciente({ identificacion, tipo_identificacion, setValidatePatient }: { identificacion: string, tipo_identificacion: string, setValidatePatient: React.Dispatch<SetStateAction<VALIDATE>> }) {
   const { register, setValue, handleSubmit, watch, formState: { errors }, unregister } = useForm<PERSONAL_INFORMATION>({
     resolver: yupResolver(PERSONAL_INFORMATION_SCHEMA),
     defaultValues: {
@@ -29,6 +29,7 @@ export default function Paciente({ identificacion, tipo_identificacion }: { iden
         } else {
           unregister()
           Alert({ title: "Exito", icon: "success", text: "Usuario creado con exito" })
+          setValidatePatient(true)
         }
       })
     } catch (err) {

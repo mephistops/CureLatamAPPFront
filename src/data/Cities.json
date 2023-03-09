@@ -731,42 +731,42 @@
   },
   {
     "name": "BOGOTA",
-    "code": "11001",
+    "code": "001",
     "dep": "11"
   },
   {
     "name": "CARTAGENA",
-    "code": "13001",
+    "code": "001",
     "dep": "13"
   },
   {
     "name": "ACHI",
-    "code": "13006",
+    "code": "006",
     "dep": "13"
   },
   {
     "name": "ALTOS DEL ROSARIO",
-    "code": "13030",
+    "code": "030",
     "dep": "13"
   },
   {
     "name": "ARENAL",
-    "code": "13042",
+    "code": "042",
     "dep": "13"
   },
   {
     "name": "ARJONA",
-    "code": "13052",
+    "code": "052",
     "dep": "13"
   },
   {
     "name": "ARROYOHONDO",
-    "code": "13062",
+    "code": "062",
     "dep": "13"
   },
   {
     "name": "BARRANCO DE LOBA",
-    "code": "13074",
+    "code": "074",
     "dep": "13"
   },
   {
