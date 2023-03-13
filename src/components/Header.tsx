@@ -12,16 +12,12 @@ export default function Header() {
       <LeftMenu show={show} handleClose={handleClose} />
 
       <div className="br-header">
-        <div className="br-header-left">
-          <div className="navicon-left hidden-md-down">
-            <div onClick={handleShow}>
-              <i className="bi bi-list"></i>
-            </div>
+        <div className="br-header-left border-0">
+          <div className="navicon-left hidden-md-down border-0">
+            
           </div>
-          <div className="navicon-left hidden-lg-up">
-            <div onClick={handleShow}>
-              <i className="bi bi-list"></i>
-            </div>
+          <div className="navicon-left hidden-lg-up border-0">
+            
           </div>          
         </div>
         <div className="br-header-right">

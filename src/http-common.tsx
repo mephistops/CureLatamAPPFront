@@ -20,11 +20,11 @@ export async function verify_Patient(identificacion: number): Promise<boolean> {
   return res
 }
 
-export async function create_Patient(data: PERSONAL_INFORMATION): Promise<boolean> {
-  var res: boolean | undefined = false
-  await http.put(`/crear_paciente`, data)
-    .then((response: { data: { Status: any; }; }) => {
-      res = Boolean(response.data.Status)
+export async function create_Patient(data: PERSONAL_INFORMATION): Promise<any | boolean> {
+  var res: any = false
+  await http.post(`/crear_paciente`, data)
+    .then((response: { data: {Status: boolean, Data: any} }) => {
+      res = response.data
     })
     .catch((e: any) => {
       res = undefined
@@ -100,10 +100,22 @@ export async function get_hours(Id_hora: string): Promise<Array<ENABLED_HOURS> |
 
 export async function put_appointment(data: APPOINTMENT): Promise<any> {
   var res: any = ''
-  await http.put(`/agendar_cita`, data)
+  await http.post(`/agendar_cita`, data)
     .then((response) => {
       res = response.data
     })
 
   return res
+}
+
+export function save_LS(name: string, data: any) {
+  localStorage.setItem(name, JSON.stringify(data))
+}
+
+export function get_LS(name: string) {
+  var data =  localStorage.getItem(name)
+  if (data !== null) {
+    return JSON.parse(data)
+  }
+  return false
 }

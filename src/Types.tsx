@@ -46,8 +46,8 @@ export const PERSONAL_INFORMATION_SCHEMA = yup.object({
   ciudad: yup.string().required(),
   regimen: yup.string().required(),
   zona: yup.string().required(),
-  celular: yup.string().required().min(10),
-  telefono: yup.string().required().min(10),
+  celular: yup.number().required().min(10),
+  telefono: yup.number(),
   correo_electronico: yup.string().required().email(),
   direccion: yup.string().required(),
 })

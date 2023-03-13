@@ -17,6 +17,7 @@
     "react-calendar": "^4.0.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.2",
+    "react-intl-tel-input": "^8.2.0",
     "react-jsonrpc-client": "^1.0.0",
     "sweetalert2": "^11.4.8",
     "sweetalert2-react-content": "^5.0.7",

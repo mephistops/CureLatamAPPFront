@@ -1,12 +1,12 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { SetStateAction, useEffect, useState } from 'react'
 import { get_appointments, get_enabled_cities, get_headquarters, get_hours, obtener_fechas, put_appointment } from "../http-common";
-import { APPOINTMENT, APPOINTMENTS, APPOINTMENT_SCHEMA, CITIES, ENABLED_APPOINTMENTS, ENABLED_HOURS, HEADQUARTERS, VALIDATE } from "../Types";
+import { APPOINTMENT, APPOINTMENT_SCHEMA, CITIES, ENABLED_APPOINTMENTS, ENABLED_HOURS, HEADQUARTERS, VALIDATE } from "../Types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import dayjs from "dayjs";
 import { Alert } from "../components/Alert";
 
-export default function Cita({ identificacion, setValidatePatient }: { identificacion: string, setValidatePatient: React.Dispatch<SetStateAction<VALIDATE>> }) {
+export default function Cita({ identificacion, setValidatePatient, setUnregisterby }: { identificacion: string, setValidatePatient: React.Dispatch<SetStateAction<VALIDATE>>, setUnregisterby: React.Dispatch<SetStateAction<boolean>>  }) {
   const { register, setValue, handleSubmit, watch, formState: { errors }, unregister } = useForm<APPOINTMENT>({
     resolver: yupResolver(APPOINTMENT_SCHEMA),
     defaultValues: {
@@ -47,6 +47,8 @@ export default function Cita({ identificacion, setValidatePatient }: { identific
         var nData = Object(data)
         var body = `el día ${nData['Fecha_cita']} a las ${nData['Hora_cita']}, para el procedimiento: ${nData['Nombre_procedimiento']}, en la sede: ${nData['Sede']}`
         Alert({title: "Información", icon: "warning", text: "Este usuario ya tiene una cita asignada "+body})
+        setUnregisterby(true)
+        unregister()
     }
   }
 
@@ -78,6 +80,7 @@ export default function Cita({ identificacion, setValidatePatient }: { identific
       var nData = (res.Data)      
       var body = `para el día ${nData['Fecha_hora'].split(' ')[0]} a las ${nData['Fecha_hora'].split(' ')[1]}, en la sede: ${nData['Sede']}`
       Alert({title: "Información", icon: "warning", text: "La cita se agendó con éxito "+body})
+      setValidatePatient(undefined)
     }
   }
 
@@ -128,7 +131,7 @@ export default function Cita({ identificacion, setValidatePatient }: { identific
 
                   <div className="col-lg-4 col-md-6 col-sm-12 mg-t-10 mg-lg-t-0">
                     <label className="form-control-label">Fecha: </label>
-                    <input type="date" className="form-control" {...register("fecha", { required: true })} min={minDate}></input>
+                    <input type="date" className="form-control" {...register("fecha", { required: true })}></input>
                   </div>
                 </div>
               </div>

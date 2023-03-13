@@ -8,6 +8,8 @@ import dayjs from "dayjs";
 import { useForm, SubmitHandler } from "react-hook-form"
 import { PERSONAL_INFORMATION, PERSONAL_INFORMATION_SCHEMA, VALIDATE } from "../Types"
 import { SetStateAction } from "react"
+import IntlTelInput from 'react-intl-tel-input';
+import 'react-intl-tel-input/dist/main.css';
 
 export default function Paciente({ identificacion, tipo_identificacion, setValidatePatient }: { identificacion: string, tipo_identificacion: string, setValidatePatient: React.Dispatch<SetStateAction<VALIDATE>> }) {
   const { register, setValue, handleSubmit, watch, formState: { errors }, unregister } = useForm<PERSONAL_INFORMATION>({
@@ -24,8 +26,9 @@ export default function Paciente({ identificacion, tipo_identificacion, setValid
     data.fecha_nacimiento = dayjs(data.fecha_nacimiento).format("DD/MM/YYYY")
     try {
       create_Patient(data).then((res) => {
-        if (!res) {
-          Alert({ title: "Error", icon: "error", text: "Error al crear el usuario" })
+        res = Object(res)
+        if (!res['Status']) {
+          Alert({ title: "Error", icon: "error", text: "Error al crear el usuario: "+res['Exception'] })
         } else {
           unregister()
           Alert({ title: "Exito", icon: "success", text: "Usuario creado con exito" })
@@ -57,7 +60,7 @@ export default function Paciente({ identificacion, tipo_identificacion, setValid
             <div className="col-lg-4 col-md-6 col-sm-12 mg-t-10 mg-lg-t-0">
               <label className="form-control-label">Primer Apellido:  <span className="text-danger">*</span></label>
               <input className="form-control" placeholder="Primer Apellido" type="text" {...register("primer_apellido")} />
-              {errors.primer_apellido && <span className="text-danger fw-bold">{errors.celular?.message}</span>}
+              {errors.primer_apellido && <span className="text-danger fw-bold">{errors.primer_apellido?.message}</span>}
             </div>
             <div className="col-lg-4 col-md-6 col-sm-12 mg-t-10 mg-lg-t-0">
               <label className="form-control-label">Segundo Apellido: </label>
@@ -74,7 +77,7 @@ export default function Paciente({ identificacion, tipo_identificacion, setValid
             </div>
             <div className="col-lg-4 col-md-6 col-sm-12 mg-t-10 mg-lg-t-0">
               <label className="form-control-label">Fecha de Nacimiento:  <span className="text-danger">*</span></label>
-              <input className="form-control" placeholder="Fecha de Nacimiento" type="date" {...register("fecha_nacimiento")} min={minDate} />
+              <input className="form-control" placeholder="Fecha de Nacimiento" type="date" {...register("fecha_nacimiento")} max={minDate} />
               {errors.fecha_nacimiento && <span className="text-danger fw-bold">{errors.fecha_nacimiento?.message}</span>}
             </div>
             <div className="col-lg-4 col-md-6 col-sm-12 mg-t-10 mg-lg-t-0">
@@ -105,11 +108,11 @@ export default function Paciente({ identificacion, tipo_identificacion, setValid
             </div>
             <div className="col-lg-4 col-md-6 col-sm-12 mg-t-10 mg-lg-t-0">
               <label className="form-control-label">Celular:  <span className="text-danger">*</span></label>
-              <input className="form-control" placeholder="Celular" type="text" {...register("celular")} />
+              <input className="form-control" placeholder="Celular" type="tel" {...register("celular")} />
               {errors.celular && <span className="text-danger fw-bold">{errors.celular?.message}</span>}
             </div>
             <div className="col-lg-4 col-md-6 col-sm-12 mg-t-10 mg-lg-t-0">
-              <label className="form-control-label">Teléfono:  <span className="text-danger">*</span></label>
+              <label className="form-control-label">Teléfono:</label>
               <input className="form-control" placeholder="Teléfono" type="text" {...register("telefono")} />
               {errors.telefono && <span className="text-danger fw-bold">{errors.telefono?.message}</span>}
             </div>

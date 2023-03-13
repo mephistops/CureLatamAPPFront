@@ -1,16 +1,17 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Spinner } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Alert } from "../components/Alert";
 import { PageHeader } from "../components/PageHeader";
-import { verify_Patient } from "../http-common";
+import { get_LS, save_LS, verify_Patient } from "../http-common";
 import { PATIENT_ID, PATIENT_ID_SCHEMA, VALIDATE } from "../Types";
 import Cita from "./Cita";
 import Paciente from "./Paciente";
 
 export default function Pad() {
   const [loading, setLoading] = useState<boolean>(false)
+  const [unregisterby, setUnregisterby] = useState<boolean>(false)
   const [validatePatient, setValidatePatient] = useState<VALIDATE>(undefined)
   const { register, handleSubmit, watch, formState: { errors }, unregister } = useForm<PATIENT_ID>({
     resolver: yupResolver(PATIENT_ID_SCHEMA)
@@ -18,6 +19,11 @@ export default function Pad() {
   const onSubmit: SubmitHandler<PATIENT_ID> = data => {
     handleClick()
   }
+
+  useEffect(() => {
+    unregister()
+  }, [unregisterby])
+  
 
   const ID = watch('identificacion')
   const TID = watch('tipo_identificacion')
@@ -32,6 +38,10 @@ export default function Pad() {
 
         await verify_Patient(Number(ID)).then((data) => {
           setValidatePatient(data)
+          var consultados = ""
+          if(get_LS("Consultados")!==false) {consultados = get_LS("Consultados")}
+          consultados += "|"+ID
+          save_LS("Consultados", consultados)
         })
       } finally {
         setLoading(false)
@@ -86,7 +96,7 @@ export default function Pad() {
 
         {
           validatePatient !== undefined &&
-          (validatePatient ? <Cita identificacion={ID} setValidatePatient={setValidatePatient} /> : <Paciente identificacion={ID} tipo_identificacion={TID} setValidatePatient={setValidatePatient}/>)
+          (validatePatient ? <Cita identificacion={ID} setValidatePatient={setValidatePatient} setUnregisterby={setUnregisterby} /> : <Paciente identificacion={ID} tipo_identificacion={TID} setValidatePatient={setValidatePatient}/>)
         }
       </div>
     </>
