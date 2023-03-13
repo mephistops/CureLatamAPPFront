@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import dayjs from "dayjs";
 import { Alert } from "../components/Alert";
 
-export default function Cita({ identificacion, setValidatePatient, setUnregisterby }: { identificacion: string, setValidatePatient: React.Dispatch<SetStateAction<VALIDATE>>, setUnregisterby: React.Dispatch<SetStateAction<boolean>>  }) {
+export default function Cita({ identificacion, setValidatePatient }: { identificacion: string, setValidatePatient: React.Dispatch<SetStateAction<VALIDATE>>  }) {
   const { register, setValue, handleSubmit, watch, formState: { errors }, unregister } = useForm<APPOINTMENT>({
     resolver: yupResolver(APPOINTMENT_SCHEMA),
     defaultValues: {
@@ -32,6 +32,11 @@ export default function Cita({ identificacion, setValidatePatient, setUnregister
     setCities(data)
   }
 
+  useEffect(() => {
+    get_appointments_availaible()
+  }, [minDate])
+  
+
   const get_headquarter = async (city: string) => {
     city = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase()
     const data = await get_headquarters(city)
@@ -40,6 +45,7 @@ export default function Cita({ identificacion, setValidatePatient, setUnregister
 
   const verify_appointment = async () => {
     const data = await get_appointments({ especialidad: especialidad, procedimiento: procedimiento, identificacion: identificacion })
+   
     if (!data) {
       setPrevAppointment(false)
     } else {
@@ -47,8 +53,6 @@ export default function Cita({ identificacion, setValidatePatient, setUnregister
         var nData = Object(data)
         var body = `el día ${nData['Fecha_cita']} a las ${nData['Hora_cita']}, para el procedimiento: ${nData['Nombre_procedimiento']}, en la sede: ${nData['Sede']}`
         Alert({title: "Información", icon: "warning", text: "Este usuario ya tiene una cita asignada "+body})
-        setUnregisterby(true)
-        unregister()
     }
   }
 
@@ -57,8 +61,7 @@ export default function Cita({ identificacion, setValidatePatient, setUnregister
     if (!data) {
       setAppointments(false)
     } else {
-      const newArray: any = data.filter((e) => dayjs(dayjs(minDate).format("DD/MM/YYYY")).isSame(e.Fecha))
-      setAppointments(newArray)
+      setAppointments(data)
     }
   }
 

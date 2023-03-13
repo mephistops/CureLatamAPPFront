@@ -27,7 +27,6 @@ export type CITIES = {
 export type VALIDATE = true | false | undefined
 
 export const PATIENT_ID_SCHEMA = yup.object({
-  tipo_identificacion: yup.string().required(),
   identificacion: yup.string().required().min(1)
 })
 
@@ -46,8 +45,8 @@ export const PERSONAL_INFORMATION_SCHEMA = yup.object({
   ciudad: yup.string().required(),
   regimen: yup.string().required(),
   zona: yup.string().required(),
-  celular: yup.number().required().min(10),
-  telefono: yup.number(),
+  celular: yup.string().required().min(10),
+  telefono: yup.string(),
   correo_electronico: yup.string().required().email(),
   direccion: yup.string().required(),
 })

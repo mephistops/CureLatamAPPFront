@@ -8,15 +8,13 @@ import dayjs from "dayjs";
 import { useForm, SubmitHandler } from "react-hook-form"
 import { PERSONAL_INFORMATION, PERSONAL_INFORMATION_SCHEMA, VALIDATE } from "../Types"
 import { SetStateAction } from "react"
-import IntlTelInput from 'react-intl-tel-input';
-import 'react-intl-tel-input/dist/main.css';
 
-export default function Paciente({ identificacion, tipo_identificacion, setValidatePatient }: { identificacion: string, tipo_identificacion: string, setValidatePatient: React.Dispatch<SetStateAction<VALIDATE>> }) {
+export default function Paciente({ identificacion, setValidatePatient }: { identificacion: string, setValidatePatient: React.Dispatch<SetStateAction<VALIDATE>> }) {
   const { register, setValue, handleSubmit, watch, formState: { errors }, unregister } = useForm<PERSONAL_INFORMATION>({
     resolver: yupResolver(PERSONAL_INFORMATION_SCHEMA),
     defaultValues: {
       identificacion: identificacion,
-      tipo_identificacion: tipo_identificacion,
+      tipo_identificacion: 'CC',
       fecha_nacimiento: dayjs(new Date()).format('YYYY-MM-DD'),
     }
   })
@@ -77,7 +75,7 @@ export default function Paciente({ identificacion, tipo_identificacion, setValid
             </div>
             <div className="col-lg-4 col-md-6 col-sm-12 mg-t-10 mg-lg-t-0">
               <label className="form-control-label">Fecha de Nacimiento:  <span className="text-danger">*</span></label>
-              <input className="form-control" placeholder="Fecha de Nacimiento" type="date" {...register("fecha_nacimiento")} max={minDate} />
+              <input className="form-control" placeholder="Fecha de Nacimiento" type="date" {...register("fecha_nacimiento")} />
               {errors.fecha_nacimiento && <span className="text-danger fw-bold">{errors.fecha_nacimiento?.message}</span>}
             </div>
             <div className="col-lg-4 col-md-6 col-sm-12 mg-t-10 mg-lg-t-0">
@@ -107,7 +105,7 @@ export default function Paciente({ identificacion, tipo_identificacion, setValid
               {errors.zona && <span className="text-danger fw-bold">{errors.zona?.message}</span>}
             </div>
             <div className="col-lg-4 col-md-6 col-sm-12 mg-t-10 mg-lg-t-0">
-              <label className="form-control-label">Celular:  <span className="text-danger">*</span></label>
+              <label className="form-control-label">Celular: <span className="text-danger">*</span></label>
               <input className="form-control" placeholder="Celular" type="tel" {...register("celular")} />
               {errors.celular && <span className="text-danger fw-bold">{errors.celular?.message}</span>}
             </div>

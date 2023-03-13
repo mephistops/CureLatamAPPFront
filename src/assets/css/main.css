@@ -1,0 +1,19 @@
+main > .container {
+  padding:80px 15px 0;
+}
+
+.btn-cure {
+  background-color: #44A69C;
+  color: #fff;
+}
+
+.bg-cure {
+  background-color: #44A69C;
+}
+.text-cure {
+  color: #44A69C;
+}
+
+.border-cure {
+  border-color: #44A69C !important;
+}
