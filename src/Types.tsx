@@ -51,6 +51,35 @@ export const PERSONAL_INFORMATION_SCHEMA = yup.object({
   direccion: yup.string().required(),
 })
 
+export type views = {
+    addPatient: boolean,
+    appointment: boolean,
+    patients: boolean,
+    loading: boolean
+}
+
+export type PATIENT = {
+  Identificacion: string,
+  Ciudad_name: string,
+  Zona: string,
+  Fecha_nacimiento: string,
+  Eps: string,
+  Primer_apellido: string,
+  Ciudad: string,
+  Celular: string,
+  Genero: string,
+  Segundo_nombre: string,
+  Departamento_name: string,
+  Telefono: string,
+  Tipo_identificacion: string,
+  Regimen: string,
+  Departamento: string,
+  Primer_nombre: string,
+  Direccion: string,
+  Segundo_apellido: string,
+  Correo_electronico: string,
+}
+
 export type PERSONAL_INFORMATION = yup.InferType<typeof PERSONAL_INFORMATION_SCHEMA>;
 
 export type HEADQUARTERS = {

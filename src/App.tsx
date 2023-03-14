@@ -1,28 +1,56 @@
 import Login from "./pages/Login";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Pad from "./pages/Pad";
 import Footer from "./components/Footer";
 
 export default function App() {
   const [isLogin, setIsLogin] = useState(true)
-  const [id, setId] = useState("")  
-  const [activeSearch, setActiveSearch] = useState(false)  
+  const [id, setId] = useState("")
+  const [activeSearch, setActiveSearch] = useState(false)
+  const [viewAddPatient, setViewAddPatient] = useState(false)
+  const [viewAppointment, setViewAppointment] = useState(false)
+  const [viewPatientCard, setViewPatientCard] = useState(false)
+  const [viewPatientDetails, setViewPatientDetails] = useState(false)
+  const [btnAdd, setBtnAdd] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   if (isLogin) {
     return (
       <>
-        <div className="text-center p-1 position-fixed rounded-circle bg-cure text-white" style={{"width": "50px", "height": "50px", "bottom": "120px", "right": "30px", "zIndex": "99"}}>
-          <i className="bi bi-person-add fs-1"></i>
-        </div>
+        <Header
+          setIdentification={setId}
+          identification={id}
+          setSearch={setActiveSearch}
+        />
 
-        <Header setIdentification={setId} identification={id} setSearch={setActiveSearch} />
+        <Pad
+          id={id}
+          setIdentification={setId}
+          search={activeSearch}
+          setSearch={setActiveSearch}
+          setViewPatientCard={setViewPatientCard}
+          setViewPatientDetails={setViewPatientDetails}
+          setViewAppointment={setViewAppointment}
+          setViewAddPatient={setViewAddPatient}
+          setLoading={setLoading}
+          viewAddPatient={viewAddPatient}
+          viewAppointment={viewAppointment}
+          viewPatientCard={viewPatientCard}
+          viewPatientDetails={viewPatientDetails}
+          setBtnAdd={setBtnAdd}
+          btnAdd={btnAdd}
+          loading={loading}
+        />
 
-        <main className="flex-shrink-0" style={{ backgroundColor: "#E9ECE", height: "100h" }}>
-          <Pad id={id} search={activeSearch} setSearch={setActiveSearch}/>
-        </main>
-
-        <Footer />
+        <Footer
+          setIdentification={setId}
+          setViewPatientCard={setViewPatientCard}
+          setViewPatientDetails={setViewPatientDetails}
+          setViewAddPatient={setViewAddPatient}
+          setViewAppointment={setViewAppointment}
+          setBtnAdd={setBtnAdd}
+        />
       </>
     )
   } else {

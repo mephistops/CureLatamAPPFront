@@ -10,11 +10,14 @@ const http = axios.create({
   }
 })
 
-export async function verify_Patient(identificacion: number): Promise<boolean> {
-  var res: boolean | undefined = false
+export async function verify_Patient(identificacion: number): Promise<any> {
+  var res: { data: { Status: boolean, Data: any } } | any
   await http.get(`/verificar_paciente_creado?Identificacion=${identificacion}`)
-    .then((response) => {
-      res = response.data.Status
+    .then((response: { data: { Status: boolean, Data: any } }) => {
+      res = response.data
+    })
+    .catch((error: any) => {
+      res = error.message
     })
 
   return res
@@ -23,7 +26,7 @@ export async function verify_Patient(identificacion: number): Promise<boolean> {
 export async function create_Patient(data: PERSONAL_INFORMATION): Promise<any | boolean> {
   var res: any = false
   await http.post(`/crear_paciente`, data)
-    .then((response: { data: {Status: boolean, Data: any} }) => {
+    .then((response: { data: { Status: boolean, Data: any } }) => {
       res = response.data
     })
     .catch((e: any) => {
@@ -58,7 +61,7 @@ export async function obtener_fechas(data: { especialidad: string, fecha_inicio:
 
   await http.get(`/obtener_fechas?especialidad=${data.especialidad}&fecha_inicio=${data.fecha_inicio}&procedimiento=${data.procedimiento}&sede=${data.sede}`)
     .then((response: { data: { Status: false; Data: ENABLED_APPOINTMENTS[]; }; }) => {
-      if(response.data.Status) {
+      if (response.data.Status) {
         res = response.data.Data
       } else {
         res = false
@@ -68,16 +71,12 @@ export async function obtener_fechas(data: { especialidad: string, fecha_inicio:
   return res
 }
 
-export async function get_appointments(data: { especialidad: string, procedimiento: string, identificacion: string }): Promise<APPOINTMENTS | boolean> {
-  var res: APPOINTMENTS | boolean = {} as APPOINTMENTS
+export async function get_appointments(data: { especialidad: string, procedimiento: string, identificacion: string }): Promise<any> {
+  var res: any
 
   await http.get(`/verificar_cita_previa?especialidad=${data.especialidad}&identificacion=${data.identificacion}&procedimiento=${data.procedimiento}`)
-    .then((response: { data: { Status: any; Data: boolean | APPOINTMENTS; }; }) => {
-      if(response.data.Status) {
-        res = response.data.Data
-      } else {
-        res = false
-      }
+    .then((response: { data: { Status: boolean; Data: boolean | APPOINTMENTS; }; }) => {
+      res = response.data
     })
 
   return res
@@ -88,7 +87,7 @@ export async function get_hours(Id_hora: string): Promise<Array<ENABLED_HOURS> |
 
   await http.get(`/obtener_horas?Id_fecha=${Id_hora}`)
     .then((response: { data: { Status: false; Data: ENABLED_HOURS[]; }; }) => {
-      if(response.data.Status) {
+      if (response.data.Status) {
         res = response.data.Data
       } else {
         res = false
@@ -113,7 +112,7 @@ export function save_LS(name: string, data: any) {
 }
 
 export function get_LS(name: string) {
-  var data =  localStorage.getItem(name)
+  var data = localStorage.getItem(name)
   if (data !== null) {
     return JSON.parse(data)
   }
